@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainMenuHandler : MonoBehaviour
 {
@@ -29,6 +30,12 @@ public class MainMenuHandler : MonoBehaviour
     {
         _cursorHotspot = new Vector2(_cursorTexture.width/2, _cursorTexture.height/2);
         //Cursor.SetCursor(_cursorTexture, _cursorHotspot, CursorMode.ForceSoftware);
+
+        _maineMenu.SetActive (true);
+        _singlepalyerMenu.SetActive (false);
+        _multiplayerMenu.SetActive (false);
+        _settingsMenu.SetActive (false);
+
         _currentMenu = _maineMenu;
         _lastMenu = _maineMenu;
     }
@@ -69,5 +76,9 @@ public class MainMenuHandler : MonoBehaviour
     {
         _missionBriefs.SetActive(true);
         _okButton.SetActive(true);
+    }
+    public void HandleOkButton()
+    {    
+        SceneManager.LoadScene(1);
     }
 }

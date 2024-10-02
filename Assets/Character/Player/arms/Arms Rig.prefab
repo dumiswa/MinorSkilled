@@ -545,6 +545,37 @@ Transform:
   - {fileID: 2207099358167202191}
   m_Father: {fileID: 8919649276859816044}
   m_LocalEulerAnglesHint: {x: -2.27, y: -0.818, z: 76.226}
+--- !u!1 &2709742000719030896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 645939612902734661}
+  m_Layer: 0
+  m_Name: WeaponMountPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &645939612902734661
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2709742000719030896}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.18320003, y: 0.027, z: 0.32200006}
+  m_LocalScale: {x: 0.66666645, y: 0.6666669, z: 0.66666657}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2812041673864541295}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2941212206136355403
 GameObject:
   m_ObjectHideFlags: 0
@@ -925,6 +956,7 @@ Transform:
   m_Children:
   - {fileID: 1804043834148004701}
   - {fileID: 2386566199766538745}
+  - {fileID: 645939612902734661}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1786285840512476518
@@ -941,8 +973,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHand: {fileID: 7641145612839085954}
   rightHand: {fileID: 4062306642568162121}
-  rightHandWeight: 1
-  leftHandWeight: 1
+  _rightHandWeight: 1
+  _leftHandWeight: 1
 --- !u!1 &5215848831251755922
 GameObject:
   m_ObjectHideFlags: 0

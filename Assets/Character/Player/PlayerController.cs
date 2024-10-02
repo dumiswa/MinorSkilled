@@ -46,12 +46,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
-
-        _armsDefaultPosition = _armsTransform.localPosition;
-        _armsDefaultRotation = _armsTransform.localRotation;
-        _currentTargetPosition = _armsDefaultPosition;
-        _currentTargetRotation = _armsDefaultRotation;
-
         _cinemachineDefaultPosition = _cinemachineTransform.localPosition;
     }
 
@@ -67,6 +61,17 @@ public class PlayerController : MonoBehaviour
 
         UpdateArmPositionAndTilt();
         ApplyCameraShake();
+    }
+
+    public void SetArmsRig(Transform armsRig)
+    {
+        _armsTransform = armsRig;
+
+        // Store the default position and rotation for use in bobbing and tilting
+        _armsDefaultPosition = _armsTransform.localPosition;
+        _armsDefaultRotation = _armsTransform.localRotation;
+        _currentTargetPosition = _armsDefaultPosition;
+        _currentTargetRotation = _armsDefaultRotation;
     }
 
     private void UpdateArmPositionAndTilt()
