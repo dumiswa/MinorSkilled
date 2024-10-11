@@ -3,7 +3,15 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Handguard
+  - Muzzle
+  - FrontGrip
+  - BackGrip
+  - Stock
+  - Trigger
+  - Magazine
+  - Scope
   layers:
   - Default
   - TransparentFX

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 369eb98b743763f4aa51fe28c57967fa, type: 3}
+  m_Name: Stock Classic
+  m_EditorClassIdentifier: 
+  PartName: Stock Classic
+  PartModel: {fileID: 2594131932213651290, guid: e9baf021d35b179449085398c74d8823,
+    type: 3}
+  RecoilModifier: 0
+  WeightModifier: 0

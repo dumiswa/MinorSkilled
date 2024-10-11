@@ -1,20 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerData : MonoBehaviour
+public static class PlayerData 
 {
-    public static PlayerData Instance;
-    public GameObject selectedGunPrefab;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); 
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    public static GameObject selectedGunPrefab;
 }

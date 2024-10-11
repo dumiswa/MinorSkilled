@@ -18,6 +18,9 @@ public class SceneLoader : MonoBehaviour
             return;
         }
 
+        GameObject gunToSpawnWith = Resources.Load<GameObject>("G");
+        PlayerData.selectedGunPrefab = gunToSpawnWith;
+
         AttachArmsAndGun();
     }
 
@@ -39,6 +42,11 @@ public class SceneLoader : MonoBehaviour
                 GameObject gun = Instantiate(_gunPrefabVariant, weaponMountPoint);
             }
             else Debug.LogError("WeaponMountPoint or selected gun is missing" + weaponMountPoint + _gunPrefabVariant);
+            /*if (weaponMountPoint != null && _gunPrefabVariant != null)
+            {
+                GameObject gun = Instantiate(_gunPrefabVariant, weaponMountPoint);
+            }
+            else Debug.LogError("WeaponMountPoint or selected gun is missing" + weaponMountPoint + _gunPrefabVariant);*/
         }
     }
 }
