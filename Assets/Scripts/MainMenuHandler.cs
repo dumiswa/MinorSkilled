@@ -79,6 +79,6 @@ public class MainMenuHandler : MonoBehaviour
     }
     public void HandleOkButton()
     {    
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 }

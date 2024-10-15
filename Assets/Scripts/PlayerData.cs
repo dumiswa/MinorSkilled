@@ -2,5 +2,5 @@
 
 public static class PlayerData 
 {
-    public static GameObject selectedGunPrefab;
+    public static GameObject SelectedGunPrefab;
 }

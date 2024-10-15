@@ -19,3 +19,14 @@ MonoBehaviour:
   BaseFireRate: 700
   BaseRecoil: 10
   BaseAmmo: 30
+  BaseWeight: 0
+  BaseReloadTime: 0
+  upperPart: {fileID: 11400000, guid: 46e6a36d9967d934980c17ba165d7206, type: 2}
+  lowerPart: {fileID: 11400000, guid: 116e58a1f059b0b4d9733ca31d2a921d, type: 2}
+  defaultHandguard: {fileID: 11400000, guid: 439fdf15936db8146a18dbc3f96ad984, type: 2}
+  defaultScope: {fileID: 11400000, guid: 7df9ff7f1513e764cb4059ae47383d95, type: 2}
+  defaultMuzzle: {fileID: 11400000, guid: 2881f513a205e014faf07acce2ec9b2f, type: 2}
+  defaultStock: {fileID: 11400000, guid: ae7cbcecc76427b4fb12e331e928a754, type: 2}
+  defaultFrontGrip: {fileID: 11400000, guid: 5a888bdf485b8274c9d12ccd64b31fcb, type: 2}
+  defaultBackGrip: {fileID: 11400000, guid: cd01e10d4d1619a43bd439331a746eea, type: 2}
+  defaultTrigger: {fileID: 11400000, guid: 0278e330c0b97774081242d73b8da946, type: 2}

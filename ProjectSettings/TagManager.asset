@@ -12,6 +12,7 @@ TagManager:
   - Trigger
   - Magazine
   - Scope
+  - Weapon
   layers:
   - Default
   - TransparentFX
