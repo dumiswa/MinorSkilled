@@ -5,6 +5,7 @@ using UnityEngine;
 public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private GameObject _armsRigPrefab;
+    [SerializeField] private GameObject _gunPrefabVariant;
     private GameObject _player;
 
     private void Start()
@@ -17,16 +18,11 @@ public class SceneLoader : MonoBehaviour
             return;
         }
 
-        /*if (PlayerData.selectedGunPrefab == null)
-        {
-            GameObject gunToSpawnWith = Resources.Load<GameObject>("G");
-            PlayerData.selectedGunPrefab = gunToSpawnWith;
-            Debug.Log("Loaded gun from Resources.");
-        }*/
+        GameObject gunToSpawnWith = Resources.Load<GameObject>("G");
+        PlayerData.selectedGunPrefab = gunToSpawnWith;
 
         AttachArmsAndGun();
     }
-
 
     private void AttachArmsAndGun()
     {
@@ -34,29 +30,23 @@ public class SceneLoader : MonoBehaviour
         {
             GameObject armsRig = Instantiate(_armsRigPrefab, _player.transform.Find("Main Camera"));
             Transform weaponMountPoint = armsRig.transform.Find("WeaponMountPoint");
-            Debug.Log("Found weapon mount point: " + weaponMountPoint);
 
             PlayerController playerController = _player.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                playerController.SetArmsRig(armsRig.transform);  // Set the arms rig on the player
+                playerController.SetArmsRig(armsRig.transform);
             }
 
-            if (weaponMountPoint != null && PlayerData.SelectedGunPrefab != null)
+            if (weaponMountPoint != null && _gunPrefabVariant != null)
             {
-                GameObject gun = PlayerData.SelectedGunPrefab;
-
-                // Attach the weapon to the WeaponMountPoint
-                gun.transform.SetParent(weaponMountPoint);  // Attach gun to mount point
-                gun.transform.localPosition = Vector3.zero;  // Reset position
-                gun.transform.localRotation = Quaternion.identity;  // Reset rotation
-
-                Debug.Log("Instantiated selected gun: " + gun.name);
+                GameObject gun = Instantiate(_gunPrefabVariant, weaponMountPoint);
             }
-            else
+            else Debug.LogError("WeaponMountPoint or selected gun is missing" + weaponMountPoint + _gunPrefabVariant);
+            /*if (weaponMountPoint != null && _gunPrefabVariant != null)
             {
-                Debug.LogError(PlayerData.SelectedGunPrefab);
+                GameObject gun = Instantiate(_gunPrefabVariant, weaponMountPoint);
             }
+            else Debug.LogError("WeaponMountPoint or selected gun is missing" + weaponMountPoint + _gunPrefabVariant);*/
         }
     }
 }

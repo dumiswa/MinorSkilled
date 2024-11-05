@@ -1,77 +1,92 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+
 
 public class WeaponBuilderUI : MonoBehaviour
 {
-    public WeaponBuilder weaponBuilder;
+    public WeaponBuilder WeaponBuilder;
 
-    public GameObject handguardMenu;
-    public GameObject muzzleMenu;
-    public GameObject stockMenu;
-    public GameObject triggerMenu;
-    public GameObject scopeMenu;
-    public GameObject frontGripMenu;
-    public GameObject backGripMenu;
-    public GameObject magazineMenu;
+    [SerializeField] private Button _scopeButton;
+    [SerializeField] private Button _muzzleButton;
+    [SerializeField] private Button _backGripButton;
+    [SerializeField] private Button _frontGripButton;
+    [SerializeField] private Button _handguardButton;
+    [SerializeField] private Button _magazineButton;
+    [SerializeField] private Button _stockButton;
+    [SerializeField] private Button _triggerButton;
 
-    public Button handguardButton;
-    public Button muzzleButton;
-    public Button stockButton;
-    public Button triggerButton;
-    public Button scopeButton;
-    public Button frontGripButton;
-    public Button backGripButton;
-    public Button magazineButton;
+    [SerializeField] private GameObject _partsOptionPanel;
+    [SerializeField] private Button _partsOptionButtonPrefab;
 
-    void Start()
+    private void Start()
     {
-        handguardButton.onClick.AddListener(() => OpenMenu(handguardMenu));
-        muzzleButton.onClick.AddListener(() => OpenMenu(muzzleMenu));
-        stockButton.onClick.AddListener(() => OpenMenu(stockMenu));
-        triggerButton.onClick.AddListener(() => OpenMenu(triggerMenu));
-        scopeButton.onClick.AddListener(() => OpenMenu(scopeMenu));
-        frontGripButton.onClick.AddListener(() => OpenMenu(frontGripMenu));
-        backGripButton.onClick.AddListener(() => OpenMenu(backGripMenu));
-        magazineButton.onClick.AddListener(() => OpenMenu(magazineMenu));
+        _scopeButton.onClick.AddListener(() => ShowPartOptions(PartType.Scope));
+        _muzzleButton.onClick.AddListener(() => ShowPartOptions(PartType.Muzzle));
+        _backGripButton.onClick.AddListener(() => ShowPartOptions(PartType.BackGrip));
+        _frontGripButton.onClick.AddListener(() => ShowPartOptions(PartType.FrontGrip));
+        _handguardButton.onClick.AddListener(() => ShowPartOptions(PartType.Handguard));
+        _magazineButton.onClick.AddListener(() => ShowPartOptions(PartType.Magazine));
+        _stockButton.onClick.AddListener(() => ShowPartOptions(PartType.Stock));
+        _triggerButton.onClick.AddListener(() => ShowPartOptions(PartType.Trigger));
     }
 
-    private void OpenMenu(GameObject menu)
+    public void ShowPartOptions(PartType partType)
     {
-        handguardMenu.SetActive(false);
-        muzzleMenu.SetActive(false);
-        stockMenu.SetActive(false);
-        triggerMenu.SetActive(false);
-        scopeMenu.SetActive(false);
-        frontGripMenu.SetActive(false);
-        backGripMenu.SetActive(false);
-        magazineMenu.SetActive(false);
+        foreach (Transform child in _partsOptionPanel.transform)
+            Destroy(child.gameObject);
 
-        menu.SetActive(true);
-    }
-    private void CloseMenu()
-    {
-        handguardMenu.SetActive(false);
-        muzzleMenu.SetActive(false);
-        stockMenu.SetActive(false);
-        triggerMenu.SetActive(false);
-        scopeMenu.SetActive(false);
-        frontGripMenu.SetActive(false);
-        backGripMenu.SetActive(false);
-        magazineMenu.SetActive(false);
+        WeaponPart[] availableParts = GetAvailableParts(partType);
+
+        foreach (var part in availableParts)
+        {
+            Button optionButton = Instantiate(_partsOptionButtonPrefab, _partsOptionPanel.transform);
+            var textComponent = optionButton.GetComponentInChildren<TextMeshProUGUI>();
+
+            textComponent.text = part.name;
+            optionButton.onClick.AddListener(() => SelectPart(partType, part));
+        }
+
+        _partsOptionPanel.SetActive(true);
     }
 
-    public void SelectPart(GameObject selectedPart)
+    private WeaponPart[] GetAvailableParts(PartType partType)
     {
-        weaponBuilder.ChangeWeaponPart(selectedPart);
-        CloseMenu();
+        return WeaponBuilder.GetAvailablePartsByType(partType);
     }
 
-    public void StartGame()
+    public void SelectPart(PartType partType, WeaponPart selectedPart)
     {
-        weaponBuilder.SaveModifiedGun();
-        SceneManager.LoadScene(1);
+        //Debug.Log($"Selected part: {selectedPart.name} for type: {partType}");
+
+        switch (partType)
+        {
+            case PartType.Scope:
+                WeaponBuilder.ReplacePart(selectedPart.PartModel, ref WeaponBuilder.SelectedScope.PartModel, "Scope");
+                break;
+            case PartType.Muzzle:
+                WeaponBuilder.ReplacePart(selectedPart.PartModel, ref WeaponBuilder.SelectedMuzzle.PartModel, "Muzzle");
+                break;
+            case PartType.BackGrip:
+                WeaponBuilder.ReplacePart(selectedPart.PartModel, ref WeaponBuilder.SelectedBackGrip.PartModel, "BackGrip");
+                break;
+            case PartType.FrontGrip:
+                WeaponBuilder.ReplacePart(selectedPart.PartModel, ref WeaponBuilder.SelectedFrontGrip.PartModel, "FrontGrip");
+                break;
+            case PartType.Handguard:
+                WeaponBuilder.ReplacePart(selectedPart.PartModel, ref WeaponBuilder.SelectedHandguard.PartModel, "Handguard");
+                break;
+            case PartType.Trigger:
+                WeaponBuilder.ReplacePart(selectedPart.PartModel, ref WeaponBuilder.SelectedTrigger.PartModel, "Trigger");
+                break;
+            case PartType.Stock:
+                WeaponBuilder.ReplacePart(selectedPart.PartModel, ref WeaponBuilder.SelectedStock.PartModel, "Stock");
+                break;
+            case PartType.Magazine:
+                WeaponBuilder.ReplacePart(selectedPart.PartModel, ref WeaponBuilder.SelectedMagazine.PartModel, "Magazine");
+                break;
+        }
+
+        _partsOptionPanel.SetActive(false);
     }
 }
