@@ -56,8 +56,8 @@ public class PlayerController : MonoBehaviour
         move.y = 0f;
         _rb.AddForce(move.normalized * _moveSpeed, ForceMode.VelocityChange);
 
-        if (_rb.velocity.magnitude > _maxVelocity)
-            _rb.velocity = _rb.velocity.normalized * _maxVelocity;  
+        if (_rb.linearVelocity.magnitude > _maxVelocity)
+            _rb.linearVelocity = _rb.linearVelocity.normalized * _maxVelocity;  
 
         UpdateArmPositionAndTilt();
         ApplyCameraShake();
