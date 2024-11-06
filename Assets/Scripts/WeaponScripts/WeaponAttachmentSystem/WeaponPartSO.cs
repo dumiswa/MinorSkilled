@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+[CreateAssetMenu()]
 public class WeaponPartSO : ScriptableObject
 {
     public enum PartType

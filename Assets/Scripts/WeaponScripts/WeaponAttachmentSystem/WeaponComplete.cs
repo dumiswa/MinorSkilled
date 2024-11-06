@@ -42,6 +42,42 @@ public class WeaponComplete : MonoBehaviour
     }
 
 
+    /* public void SetPart(WeaponPartSO weaponPartSO)
+     {
+         // Destroy currently attached part
+         if (attachedWeaponPartDic[weaponPartSO.partType].spawnedTransform != null)
+         {
+             Destroy(attachedWeaponPartDic[weaponPartSO.partType].spawnedTransform.gameObject);
+         }
+
+         // Spawn new part
+         Transform spawnedPartTransform = Instantiate(weaponPartSO.prefab);
+         AttachedWeaponPart attachedWeaponPart = attachedWeaponPartDic[weaponPartSO.partType];
+         attachedWeaponPart.spawnedTransform = spawnedPartTransform;
+
+         Transform attachPointTransform = attachedWeaponPart.partTypeAttachPoint.attachPointTransform;
+         spawnedPartTransform.parent = attachPointTransform;
+         spawnedPartTransform.localEulerAngles = Vector3.zero;
+         spawnedPartTransform.localPosition = Vector3.zero;
+
+         attachedWeaponPart.weaponPartSO = weaponPartSO;
+
+         attachedWeaponPartDic[weaponPartSO.partType] = attachedWeaponPart;
+
+         // Is it a barrel?
+         if (weaponPartSO.partType == WeaponPartSO.PartType.HandGuard)
+         {
+             HandGuardWeaponPartSO barrelWeaponPartSO = (HandGuardWeaponPartSO)weaponPartSO;
+
+             AttachedWeaponPart barrelPartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.HandGuard];
+             AttachedWeaponPart muzzlePartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.Muzzle];
+
+             muzzlePartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.position =
+                 barrelPartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.position +
+                 barrelPartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.forward * barrelWeaponPartSO.muzzleOffset;
+         }
+     }*/
+
     public void SetPart(WeaponPartSO weaponPartSO)
     {
         // Destroy currently attached part
@@ -50,25 +86,26 @@ public class WeaponComplete : MonoBehaviour
             Destroy(attachedWeaponPartDic[weaponPartSO.partType].spawnedTransform.gameObject);
         }
 
-        // Spawn new part
+        // Ensure proper instantiation
         Transform spawnedPartTransform = Instantiate(weaponPartSO.prefab);
+        //spawnedPartTransform = Instantiate(spawnedPartTransform);  // Additional clone for safety
         AttachedWeaponPart attachedWeaponPart = attachedWeaponPartDic[weaponPartSO.partType];
         attachedWeaponPart.spawnedTransform = spawnedPartTransform;
 
         Transform attachPointTransform = attachedWeaponPart.partTypeAttachPoint.attachPointTransform;
         spawnedPartTransform.parent = attachPointTransform;
-        spawnedPartTransform.localEulerAngles = Vector3.zero;
-        spawnedPartTransform.localPosition = Vector3.zero;
+        spawnedPartTransform.localEulerAngles = new Vector3 (0, -90, 0);
+        spawnedPartTransform.localPosition = new Vector3(0, 1, -12);
+        
 
         attachedWeaponPart.weaponPartSO = weaponPartSO;
 
         attachedWeaponPartDic[weaponPartSO.partType] = attachedWeaponPart;
 
-        // Is it a barrel?
-        if (weaponPartSO.partType == WeaponPartSO.PartType.HandGuard)
+        // Safe casting for HandGuard
+        HandGuardWeaponPartSO barrelWeaponPartSO = weaponPartSO as HandGuardWeaponPartSO;
+        if (barrelWeaponPartSO != null)
         {
-            HandGuardWeaponPartSO barrelWeaponPartSO = (HandGuardWeaponPartSO)weaponPartSO;
-
             AttachedWeaponPart barrelPartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.HandGuard];
             AttachedWeaponPart muzzlePartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.Muzzle];
 
@@ -77,7 +114,6 @@ public class WeaponComplete : MonoBehaviour
                 barrelPartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.forward * barrelWeaponPartSO.muzzleOffset;
         }
     }
-
 
     public WeaponPartSO GetWeaponPartSO(WeaponPartSO.PartType partType)
     {
