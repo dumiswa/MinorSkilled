@@ -42,41 +42,6 @@ public class WeaponComplete : MonoBehaviour
     }
 
 
-    /* public void SetPart(WeaponPartSO weaponPartSO)
-     {
-         // Destroy currently attached part
-         if (attachedWeaponPartDic[weaponPartSO.partType].spawnedTransform != null)
-         {
-             Destroy(attachedWeaponPartDic[weaponPartSO.partType].spawnedTransform.gameObject);
-         }
-
-         // Spawn new part
-         Transform spawnedPartTransform = Instantiate(weaponPartSO.prefab);
-         AttachedWeaponPart attachedWeaponPart = attachedWeaponPartDic[weaponPartSO.partType];
-         attachedWeaponPart.spawnedTransform = spawnedPartTransform;
-
-         Transform attachPointTransform = attachedWeaponPart.partTypeAttachPoint.attachPointTransform;
-         spawnedPartTransform.parent = attachPointTransform;
-         spawnedPartTransform.localEulerAngles = Vector3.zero;
-         spawnedPartTransform.localPosition = Vector3.zero;
-
-         attachedWeaponPart.weaponPartSO = weaponPartSO;
-
-         attachedWeaponPartDic[weaponPartSO.partType] = attachedWeaponPart;
-
-         // Is it a barrel?
-         if (weaponPartSO.partType == WeaponPartSO.PartType.HandGuard)
-         {
-             HandGuardWeaponPartSO barrelWeaponPartSO = (HandGuardWeaponPartSO)weaponPartSO;
-
-             AttachedWeaponPart barrelPartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.HandGuard];
-             AttachedWeaponPart muzzlePartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.Muzzle];
-
-             muzzlePartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.position =
-                 barrelPartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.position +
-                 barrelPartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.forward * barrelWeaponPartSO.muzzleOffset;
-         }
-     }*/
 
     public void SetPart(WeaponPartSO weaponPartSO)
     {
@@ -87,49 +52,51 @@ public class WeaponComplete : MonoBehaviour
         }
 
         // Ensure proper instantiation
-        Transform spawnedPartTransform = Instantiate(weaponPartSO.prefab);
-        //spawnedPartTransform = Instantiate(spawnedPartTransform);  // Additional clone for safety
+        Transform spawnedPartTransform = Instantiate(weaponPartSO.prefab).transform;
         AttachedWeaponPart attachedWeaponPart = attachedWeaponPartDic[weaponPartSO.partType];
         attachedWeaponPart.spawnedTransform = spawnedPartTransform;
 
         Transform attachPointTransform = attachedWeaponPart.partTypeAttachPoint.attachPointTransform;
-        spawnedPartTransform.parent = attachPointTransform;
-        spawnedPartTransform.localEulerAngles = new Vector3 (0, -90, 0);
-        spawnedPartTransform.localPosition = new Vector3(0, 1, -12);
-        
+        spawnedPartTransform.SetParent(attachPointTransform, false);
+        //spawnedPartTransform.localEulerAngles = Vector3.zero;
+        //spawnedPartTransform.localRotation = Quaternion.identity;
+        //spawnedPartTransform.localPosition = Vector3.zero;
+        //spawnedPartTransform.localScale = Vector3.one;
 
         attachedWeaponPart.weaponPartSO = weaponPartSO;
-
         attachedWeaponPartDic[weaponPartSO.partType] = attachedWeaponPart;
 
+        Debug.Log(weaponPartSO);
         // Safe casting for HandGuard
-        HandGuardWeaponPartSO barrelWeaponPartSO = weaponPartSO as HandGuardWeaponPartSO;
-        if (barrelWeaponPartSO != null)
-        {
-            AttachedWeaponPart barrelPartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.HandGuard];
-            AttachedWeaponPart muzzlePartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.Muzzle];
-
-            muzzlePartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.position =
-                barrelPartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.position +
-                barrelPartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.forward * barrelWeaponPartSO.muzzleOffset;
-        }
+        if (weaponPartSO is HandGuardWeaponPartSO handGuardPartSO)    
+            AdjustMuzzleOffset(handGuardPartSO);    
     }
+    private void AdjustMuzzleOffset(HandGuardWeaponPartSO handguardWeaponPartSO)
+    {
+        AttachedWeaponPart handguardPartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.HandGuard];
+        AttachedWeaponPart muzzlePartTypeAttachedWeaponPart = attachedWeaponPartDic[WeaponPartSO.PartType.Muzzle];
+
+        muzzlePartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.position =
+            handguardPartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.position +
+            handguardPartTypeAttachedWeaponPart.partTypeAttachPoint.attachPointTransform.forward * handguardWeaponPartSO.muzzleOffset;
+    }
+
+
 
     public WeaponPartSO GetWeaponPartSO(WeaponPartSO.PartType partType)
     {
         AttachedWeaponPart attachedWeaponPart = attachedWeaponPartDic[partType];
         return attachedWeaponPart.weaponPartSO;
     }
-
     public List<WeaponPartSO.PartType> GetWeaponPartTypeList()
     {
         return new List<WeaponPartSO.PartType>(attachedWeaponPartDic.Keys);
     }
-
     public WeaponBodySO GetWeaponBodySO()
     {
         return weaponBody.GetWeaponBodySO();
     }
+
 
 
     public string Save()
@@ -153,7 +120,6 @@ public class WeaponComplete : MonoBehaviour
 
         return json;
     }
-
     public void Load(string json)
     {
         SaveObject saveObject = JsonUtility.FromJson<SaveObject>(json);
@@ -179,7 +145,9 @@ public class WeaponComplete : MonoBehaviour
     {
         SaveObject saveObject = JsonUtility.FromJson<SaveObject>(json);
 
-        Transform weaponCompleteTransform = Instantiate(saveObject.weaponBodySO.prefab);
+        Transform parentTransform = WeaponAttachmentSystem.Instance?.transform;
+        Transform weaponCompleteTransform = Instantiate(saveObject.weaponBodySO.prefab, parentTransform);
+
         WeaponComplete weaponComplete = weaponCompleteTransform.GetComponent<WeaponComplete>();
 
         weaponComplete.Load(json);

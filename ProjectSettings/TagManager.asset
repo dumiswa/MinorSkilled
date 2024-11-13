@@ -13,14 +13,15 @@ TagManager:
   - Magazine
   - Scope
   - Weapon
+  - ScreenshotCamera
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Background
   - Water
   - UI
-  - 
+  - WorldCanvas
   - 
   - 
   - 

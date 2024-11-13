@@ -7,10 +7,7 @@ using UnityEngine.UI;
 
 public class WeaponBodyUI : MonoBehaviour
 {
-
-
     public static WeaponBodyUI Instance { get; private set; }
-
 
 
     [Serializable]
@@ -20,7 +17,6 @@ public class WeaponBodyUI : MonoBehaviour
         public Button button;
         public TextMeshProUGUI buttonTextMesh;
     }
-
 
     [SerializeField] private List<WeaponPartButton> weaponPartButtonList;
 
@@ -45,25 +41,16 @@ public class WeaponBodyUI : MonoBehaviour
     }
 
     private void WeaponAttachmentSystem_OnAnyPartChanged(object sender, EventArgs e)
-    {
-        RefreshButtonTextMesh();
-    }
+        => RefreshButtonTextMesh();
+    
 
     private void RefreshButtonTextMesh()
     {
-        foreach (WeaponPartButton weaponPartButton in weaponPartButtonList)
-        {
-            // Don't like how the numbers look
-            //weaponPartButton.buttonTextMesh.text = weaponPartButton.partType.ToString().ToUpper() + " " + (WeaponAttachmentSystem.Instance.GetPartIndex(weaponPartButton.partType)+1);
+        foreach (WeaponPartButton weaponPartButton in weaponPartButtonList)      
             weaponPartButton.buttonTextMesh.text = weaponPartButton.partType.ToString().ToUpper();
-        }
-
     }
 
     public void ToggleVisibility()
-    {
-        gameObject.SetActive(!gameObject.activeSelf);
-    }
-
+        => gameObject.SetActive(!gameObject.activeSelf);
 
 }

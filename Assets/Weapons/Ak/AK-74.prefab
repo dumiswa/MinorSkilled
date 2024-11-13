@@ -83,6 +83,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: AK-74
       objectReference: {fileID: 0}
+    - target: {fileID: 6435920584951026919, guid: 6dbfe5e8a5d81d2469e8f9dc2c365fd2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

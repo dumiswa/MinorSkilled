@@ -14,15 +14,9 @@ public class WeaponAttachmentSystem : MonoBehaviour
     [SerializeField] private WeaponComplete _weaponComplete;
 
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-    private void Start()
-    {
-        SetWeaponBody(_weaponBodySO);
-    }
-
+    private void Awake() => Instance = this;
+    private void Start() => SetWeaponBody(_weaponBodySO);
+    
 
     public void SetWeaponBody(WeaponBodySO weaponBodySO)
     {
@@ -36,20 +30,38 @@ public class WeaponAttachmentSystem : MonoBehaviour
 
         this._weaponBodySO = weaponBodySO;
 
-        Transform weaponBodyTransform = Instantiate(_weaponBodySO.prefab);
-        weaponBodyTransform.eulerAngles = previousEularAngles;
-        _weaponComplete = weaponBodyTransform.GetComponent<WeaponComplete>();
+        // Instantiate and reset weapon body transform
+        Transform weaponBodyTransform = Instantiate(_weaponBodySO.prefab, transform);  // Parent to the system for now
+        weaponBodyTransform.localPosition = Vector3.zero;  // Reset local position
+        weaponBodyTransform.localRotation = Quaternion.identity;  // Reset local rotation
+        weaponBodyTransform.eulerAngles = previousEularAngles;  // Apply previous rotation if needed
 
-        Instantiate(weaponBodySO.prefabUI, weaponBodyTransform);
+        // Adjust the weapon model to fit in the UI 
+        Transform weaponModel = null;
+        foreach (Transform child in weaponBodyTransform.GetComponentInChildren<Transform>(true))
+        {
+            if (child.CompareTag("Weapon"))
+            {
+                weaponModel = child;
+                weaponModel.localPosition = new Vector3(0, 0.62f, -4.7f);
+                weaponModel.localRotation = Quaternion.Euler(0, -90, 0);
+                break;          
+            }
+            else Debug.LogError($"Error in WeaponAttachmentSysatem! No Gameobject with have tag 'Weapon'");
+        }
+
+        // Get WeaponComplete component and attach the prefabUI
+        _weaponComplete = weaponBodyTransform.GetComponent<WeaponComplete>();
+        Transform uiTransform = Instantiate(weaponBodySO.prefabUI, weaponBodyTransform);
+        uiTransform.localPosition = Vector3.zero;  // Reset UI position relative to weapon body
+        uiTransform.localRotation = Quaternion.identity;  // Reset UI rotation
     }
 
     public int GetPartIndex(WeaponPartSO.PartType partType)
     {
         WeaponPartSO attachedWeaponPartSO = _weaponComplete.GetWeaponPartSO(partType);
-        if (attachedWeaponPartSO == null)
-        {
-            return 0;
-        }
+        if (attachedWeaponPartSO == null)      
+            return 0;   
         else 
         {
             List<WeaponPartSO> weaponPartSOList = _weaponBodySO.weaponPartListSO.GetWeaponPartSOList(partType); ;
@@ -83,10 +95,8 @@ public class WeaponAttachmentSystem : MonoBehaviour
         foreach (WeaponPartSO.PartType partType in _weaponComplete.GetWeaponPartTypeList())
         {
             int randomAmount = UnityEngine.Random.Range(0, 50);
-            for (int i = 0; i < randomAmount; i++)
-            {
-                ChangePart(partType);
-            }
+            for (int i = 0; i < randomAmount; i++)            
+                ChangePart(partType);         
         }
     }
 
@@ -126,7 +136,5 @@ public class WeaponAttachmentSystem : MonoBehaviour
     }
 
     public void ResetWeaponRotation()
-    {
-        _weaponComplete.transform.eulerAngles = Vector3.zero;
-    }
+        => _weaponComplete.transform.eulerAngles = Vector3.zero;   
 }

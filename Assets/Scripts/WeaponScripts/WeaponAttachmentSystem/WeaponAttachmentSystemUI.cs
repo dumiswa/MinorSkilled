@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class WeaponAttachmentSystemUI : MonoBehaviour
 {
-
-
     [SerializeField] private WeaponBodyListSO weaponBodyListSO;
     [SerializeField] private Button pistolBodyButton;
     [SerializeField] private Button rifleABodyButton;
@@ -22,7 +20,6 @@ public class WeaponAttachmentSystemUI : MonoBehaviour
     [SerializeField] private Transform loadContainer;
     [SerializeField] private Transform loadTemplate;
     [SerializeField] private Camera screenshotCamera;
-
 
     private Action<Texture2D> onScreenshotTaken;
 
