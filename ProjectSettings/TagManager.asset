@@ -15,6 +15,8 @@ TagManager:
   - Weapon
   - ScreenshotCamera
   - UI
+  - Waypoint
+  - EnemyAI
   layers:
   - Default
   - TransparentFX
