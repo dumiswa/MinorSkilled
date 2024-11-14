@@ -65,8 +65,6 @@ public class WeaponComplete : MonoBehaviour
 
         attachedWeaponPart.weaponPartSO = weaponPartSO;
         attachedWeaponPartDic[weaponPartSO.partType] = attachedWeaponPart;
-
-        Debug.Log(weaponPartSO);
         // Safe casting for HandGuard
         if (weaponPartSO is HandGuardWeaponPartSO handGuardPartSO)    
             AdjustMuzzleOffset(handGuardPartSO);    
@@ -134,10 +132,8 @@ public class WeaponComplete : MonoBehaviour
     [Serializable]
     public class SaveObject
     {
-
         public WeaponBodySO weaponBodySO;
         public List<WeaponPartSO> weaponPartSOList;
-
     }
 
 
@@ -152,9 +148,32 @@ public class WeaponComplete : MonoBehaviour
 
         weaponComplete.Load(json);
 
+        Transform weaponModel = null;
+        foreach (Transform child in weaponCompleteTransform.GetComponentInChildren<Transform>(true))
+        {
+            if (child.CompareTag("Weapon"))
+            {
+                weaponModel = child;
+                weaponModel.localPosition = new Vector3(0, 0.62f, -4.7f);
+                weaponModel.localRotation = Quaternion.Euler(0, -90, 0);
+                break;
+            }
+        }
+
         if (spawnUI)
         {
-            Instantiate(saveObject.weaponBodySO.prefabUI, weaponCompleteTransform);
+            // Instantiate UI and ensure its transform is correctly reset
+            Transform uiTransform = Instantiate(saveObject.weaponBodySO.prefabUI, weaponCompleteTransform);
+            uiTransform.localPosition = Vector3.zero;
+            uiTransform.localRotation = Quaternion.identity;
+            uiTransform.localScale = Vector3.one;
+
+            // Ensure children of the UI are correctly positioned
+            foreach (Transform child in uiTransform)
+            {
+                child.localPosition = child.localPosition; // Ensure positions are respected
+                child.localRotation = Quaternion.identity; // Reset rotation
+            }
         }
 
         return weaponComplete;

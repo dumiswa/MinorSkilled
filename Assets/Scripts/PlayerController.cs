@@ -114,8 +114,7 @@ public class PlayerController : MonoBehaviour
             _cinemachineCameraShakeOffset = 
                 Vector3.Lerp(_cinemachineCameraShakeOffset, new Vector3(shakeX, shakeY, 0), Time.deltaTime * _shakeLerpSpeed);
         }
-        else
-            _cinemachineCameraShakeOffset = Vector3.Lerp(_cinemachineCameraShakeOffset, Vector3.zero, Time.deltaTime * _shakeLerpSpeed);
+        else _cinemachineCameraShakeOffset = Vector3.Lerp(_cinemachineCameraShakeOffset, Vector3.zero, Time.deltaTime * _shakeLerpSpeed);
 
         _cinemachineTransform.localPosition = _cinemachineDefaultPosition + _cinemachineCameraShakeOffset;
     }

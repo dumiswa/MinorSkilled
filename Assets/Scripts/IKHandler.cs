@@ -1,38 +1,83 @@
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class IKHandler : MonoBehaviour
 {
-    private Animator animator;
-
     [Header("IK Settings")]
-    public Transform leftHand; // For the front grip
-    public Transform rightHand; // For the back grip
+    // Left Hand Settings
+    public Transform palmLeft; // Assign the "palm left" from the rig hierarchy
+    public Transform leftElbowHint; // Optional elbow hint for better bending
 
-    [SerializeField] private float _rightHandWeight;
-    [SerializeField] private float _leftHandWeight;
+    // Right Hand Settings
+    public Transform palmRight; // Assign the "palm right" from the rig hierarchy
+    public Transform rightElbowHint; // Optional elbow hint for better bending
 
-    private void Start() => animator = GetComponent<Animator>();
+    private TwoBoneIKConstraint leftArmIK; // Left arm IK constraint
+    private TwoBoneIKConstraint rightArmIK; // Right arm IK constraint
 
-    private void OnAnimatorIK(int layerIndex)
+    private void Awake()
     {
-        if (animator)
-        {
-            if (rightHand != null)
-            {
-                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, _rightHandWeight); 
-                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, _rightHandWeight);
-                animator.SetIKPosition(AvatarIKGoal.RightHand, rightHand.position);
-                animator.SetIKRotation(AvatarIKGoal.RightHand, rightHand.rotation);
-            }
+        // Find the Two Bone IK Constraints on the arms
+        leftArmIK = transform.Find("root/chest/arm.L").GetComponent<TwoBoneIKConstraint>();
+        rightArmIK = transform.Find("root/chest/arm.R").GetComponent<TwoBoneIKConstraint>();
 
-            if (leftHand != null)
-            {
-                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, _leftHandWeight);
-                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, _leftHandWeight);
-                animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHand.position);
-                animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHand.rotation);
-            }
+        if (leftArmIK == null)
+            Debug.LogError("Two Bone IK Constraint not found on arm left!");
+
+        if (rightArmIK == null)
+            Debug.LogError("Two Bone IK Constraint not found on arm right!");
+
+        if (palmLeft == null)
+            Debug.LogError("palmLeft is not assigned in the Inspector!");
+
+        if (palmRight == null)
+            Debug.LogError("palmRight is not assigned in the Inspector!");
+    }
+
+    public void SetHandTargets(Transform frontGrip, Transform backGrip)
+    {
+        // Ensure all references are valid
+        if (leftArmIK == null || rightArmIK == null)
+        {
+            Debug.LogError("Two Bone IK Constraints are not assigned!");
+            return;
+        }
+
+        if (frontGrip == null || backGrip == null)
+        {
+            Debug.LogError("FrontGrip or BackGrip is null!");
+            return;
+        }
+
+        // Set the left hand target (Front Grip)
+        leftArmIK.data.target.position = frontGrip.position;
+        leftArmIK.data.target.rotation = frontGrip.rotation;
+
+        // Set the right hand target (Back Grip)
+        rightArmIK.data.target.position = backGrip.position;
+        rightArmIK.data.target.rotation = backGrip.rotation;
+
+        Debug.Log($"Set Left Hand Target to {frontGrip.name} and Right Hand Target to {backGrip.name}");
+        UpdateElbowHints();
+    }
+    private void UpdateElbowHints()
+    {
+        if (leftElbowHint != null && leftArmIK != null)
+        {
+            // Position the left elbow hint slightly behind and to the side of the arm
+            Vector3 directionToTarget = (leftArmIK.data.target.position - leftArmIK.transform.position).normalized;
+            leftElbowHint.position = leftArmIK.transform.position + directionToTarget * -0.5f + Vector3.up * 0.2f;
+            leftArmIK.data.hint = leftElbowHint; // Apply the hint
+        }
+
+        if (rightElbowHint != null && rightArmIK != null)
+        {
+            // Position the right elbow hint slightly behind and to the side of the arm
+            Vector3 directionToTarget = (rightArmIK.data.target.position - rightArmIK.transform.position).normalized;
+            rightElbowHint.position = rightArmIK.transform.position + directionToTarget * -0.5f + Vector3.up * 0.2f;
+            rightArmIK.data.hint = rightElbowHint; // Apply the hint
         }
     }
+
 }
 

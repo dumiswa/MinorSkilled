@@ -14,6 +14,7 @@ TagManager:
   - Scope
   - Weapon
   - ScreenshotCamera
+  - UI
   layers:
   - Default
   - TransparentFX

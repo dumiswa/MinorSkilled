@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class WeaponAttachmentSystem : MonoBehaviour
 {
@@ -14,7 +15,15 @@ public class WeaponAttachmentSystem : MonoBehaviour
     [SerializeField] private WeaponComplete _weaponComplete;
 
 
-    private void Awake() => Instance = this;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);  
+    }
     private void Start() => SetWeaponBody(_weaponBodySO);
     
 
@@ -136,5 +145,20 @@ public class WeaponAttachmentSystem : MonoBehaviour
     }
 
     public void ResetWeaponRotation()
-        => _weaponComplete.transform.eulerAngles = Vector3.zero;   
+        => _weaponComplete.transform.eulerAngles = Vector3.zero;
+
+    public void DisableAttachmentMenuUI()
+    {
+        if (_weaponComplete != null)
+        {
+            foreach (Transform child in _weaponComplete.transform)
+            {
+                if (child.CompareTag("UI"))
+                {
+                    Destroy(child.gameObject); 
+                }
+                else Debug.LogError("No object found inside the WeaponAttachmentSystem with tag 'UI'");
+            }         
+        }
+    }
 }
