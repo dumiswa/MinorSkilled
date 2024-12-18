@@ -1,87 +1,85 @@
-using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class MissionManager : MonoBehaviour
 {
-    [SerializeField] private Mission currentMission; // Assign in Inspector
-    private int currentEventIndex = 0;
-    private int currentKillCount = 0;
+    [SerializeField] private Transform waypointParent; 
+    private List<Waypoint> waypoints = new List<Waypoint>();
+    private int currentWaypointIndex = 0;
 
+    [SerializeField] private TextMeshProUGUI uiMessage;
+    //[SerializeField] private Transform taskIndicator;
+    [SerializeField] private Color textColor = Color.cyan;
+
+    private void OnEnable()
+        => Waypoint.OnWaypointReached += HandleWaypointReached;
+    private void OnDisable()
+        => Waypoint.OnWaypointReached -= HandleWaypointReached;
+    
     private void Start()
     {
-        if (currentMission != null && currentMission.missionEvents.Count > 0)
-        {
-            StartCoroutine(HandleMissionEvents());
-        }
+        /*taskIndicator.TryGetComponent<TextMeshPro>(out TextMeshPro textMeshPro);
+        uiMessage = textMeshPro;*/
+
+        LoadWaypoints();
+        ActivateCurrentWaypoint();
     }
 
-    private IEnumerator HandleMissionEvents()
+    private void HandleWaypointReached(string waypointName)
     {
-        while (currentEventIndex < currentMission.missionEvents.Count)
-        {
-            var missionEvent = currentMission.missionEvents[currentEventIndex];
+        Debug.Log($"Waypoint '{waypointName}' reached.");
 
-            yield return StartCoroutine(HandleEvent(missionEvent));
-
-            currentEventIndex++;
-        }
-
-        Debug.Log("Mission Completed!");
+        currentWaypointIndex++;
+        ActivateCurrentWaypoint();
     }
 
-    private IEnumerator HandleEvent(MissionEvent missionEvent)
+    private void LoadWaypoints()
     {
-        switch (missionEvent.eventType)
+        waypoints.Clear();
+
+        if (waypointParent != null)
         {
-            case MissionEvent.EventType.ReachWaypoint:
-                yield return HandleReachWaypoint(missionEvent);
-                break;
-
-            case MissionEvent.EventType.KillEnemies:
-                yield return HandleKillEnemies(missionEvent);
-                break;
-
-            case MissionEvent.EventType.DestroyObject:
-                yield return HandleDestroyObject(missionEvent);
-                break;
+            Waypoint[] foundWaypoints = waypointParent.GetComponentsInChildren<Waypoint>();
+            waypoints.AddRange(foundWaypoints);
+            Debug.Log($"Loaded {waypoints.Count} waypoints from '{waypointParent.name}'.");
         }
+        else Debug.LogError("Waypoint Parent is not assigned in the MissionManager.");
+        
     }
 
-    private IEnumerator HandleReachWaypoint(MissionEvent missionEvent)
+    private void ActivateCurrentWaypoint()
     {
-        while (Vector3.Distance(missionEvent.waypoint.position, transform.position) > 1f)
+        foreach (var waypoint in waypoints)
         {
-            yield return null; 
+            if (waypoint.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
+                renderer.enabled = false;
         }
 
-        Debug.Log($"Reached Waypoint: {missionEvent.waypoint.name}");
-    }
-
-    private IEnumerator HandleKillEnemies(MissionEvent missionEvent)
-    {
-        currentKillCount = 0;
-
-        EventManager.OnTaskEvent += (eventName) =>
+        if (currentWaypointIndex < waypoints.Count)
         {
-            if (eventName == "EnemyKilled")
-            {
-                currentKillCount++;
-            }
-        };
+            Waypoint currentWaypoint = waypoints[currentWaypointIndex];
 
-        yield return new WaitUntil(() => currentKillCount >= missionEvent.enemyKillCount);
+            if (currentWaypoint.TryGetComponent<MeshRenderer>(out MeshRenderer currentRenderer))
+                currentRenderer.enabled = true;
 
-        Debug.Log($"Killed {missionEvent.enemyKillCount} enemies.");
-    }
-
-    private IEnumerator HandleDestroyObject(MissionEvent missionEvent)
-    {
-        while (missionEvent.targetObject != null) 
-        {
-            yield return null;
+            currentWaypoint.ActivateWaypoint();
+            UpdateMessage(currentWaypoint.waypointName);
+            Debug.Log($"Activating Waypoint: {currentWaypoint.waypointName}");
         }
+        else Debug.Log("All waypoints completed! Mission Complete.");
+    }
 
-        Debug.Log($"Destroyed Object: {missionEvent.targetObject.name}");
+    private void UpdateMessage(string waypointName)
+    {
+        string displayText;
+
+        if (waypointName == "New Waypoint")
+            displayText = $"Reach <color=#{ColorUtility.ToHtmlStringRGB(textColor)}>Destination</color>";
+        else displayText = $"Reach <color=#{ColorUtility.ToHtmlStringRGB(textColor)}>{waypointName}</color>";
+
+        if (uiMessage != null)
+            uiMessage.text = displayText;     
     }
 }
