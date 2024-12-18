@@ -17,6 +17,7 @@ TagManager:
   - UI
   - Waypoint
   - EnemyAI
+  - DummyTarget
   layers:
   - Default
   - TransparentFX

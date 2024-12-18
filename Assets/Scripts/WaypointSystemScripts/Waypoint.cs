@@ -11,13 +11,24 @@ public class Waypoint : MonoBehaviour
     public bool isActive = false; // Tracks if the waypoint is currently active
     public static event Action<string> OnWaypointReached; // Event when waypoint task is completed
 
-    //private int currentKillCount = 0;
+    private int currentKillCount = 0;
 
     public enum TaskType
     {
         ReachDestination,
         KillEnemies,
         DestroyObject
+    }
+    private void OnEnable()
+    {
+        KillableDummy.OnEnemyKilled += HandleEnemyKilled;
+        DestroyableObject.OnObjectDestroyed += HandleObjectDestroyed;
+    }
+
+    private void OnDisable()
+    {
+        KillableDummy.OnEnemyKilled -= HandleEnemyKilled;
+        DestroyableObject.OnObjectDestroyed -= HandleObjectDestroyed;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,7 +51,7 @@ public class Waypoint : MonoBehaviour
             case TaskType.KillEnemies:
                 if (enemyParent != null)
                 {
-                    //currentKillCount = 0;
+                    currentKillCount = 0;
                     CheckKillEnemies();
                 }
                 break;
@@ -51,6 +62,31 @@ public class Waypoint : MonoBehaviour
                     CheckDestroyObject();
                 }
                 break;
+        }
+    }
+
+    private void HandleEnemyKilled(GameObject enemy)
+    {
+        if (enemyParent == null || !isActive) return;
+
+        if (enemy.transform.IsChildOf(enemyParent.transform))
+        {
+            currentKillCount++;
+
+            if (currentKillCount >= enemyParent.transform.childCount)
+            {
+                CompleteTask();
+            }
+        }
+    }
+
+    private void HandleObjectDestroyed(GameObject destroyedObject)
+    {
+        if (targetObject == null || !isActive) return;
+
+        if (destroyedObject == targetObject)
+        {            
+            CompleteTask();
         }
     }
 

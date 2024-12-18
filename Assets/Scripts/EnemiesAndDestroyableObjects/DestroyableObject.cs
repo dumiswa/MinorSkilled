@@ -1,11 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class DestroyableObject : MonoBehaviour
 {
-    public void Die()
+    [Header("Settings")]
+    [SerializeField] private int hitPoints = 3; 
+    [SerializeField] private ParticleSystem explosionEffect; 
+
+    private int currentHits = 0;
+
+    public static event Action<GameObject> OnObjectDestroyed;
+
+    public void TakeDamage()
     {
-        Destroy(this);
+        currentHits++;
+        Debug.Log($"{gameObject.name} hit {currentHits}/{hitPoints} times.");
+
+        if (currentHits >= hitPoints)
+        {
+            DestroyObject();
+        }
+    }
+
+    private void DestroyObject()
+    {
+        if (explosionEffect != null)
+        {
+            ParticleSystem explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+            explosion.Play();
+            Destroy(explosion.gameObject, explosion.main.duration);
+        }
+
+        OnObjectDestroyed?.Invoke(gameObject); 
+
+        Destroy(gameObject);
     }
 }
