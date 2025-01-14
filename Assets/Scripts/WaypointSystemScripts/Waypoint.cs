@@ -1,39 +1,57 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class Waypoint : MonoBehaviour
 {
     public string waypointName; // Unique name
     [HideInInspector] public TaskType taskType = TaskType.ReachDestination; // Default task type
-    [HideInInspector] public GameObject enemyParent; // For KillEnemies task
-    [HideInInspector] public GameObject targetObject; // For DestroyObject task
+    [HideInInspector] public GameObject EnemyParent; // For KillEnemies task
+    [HideInInspector] public GameObject TargetObject; // For DestroyObject task
+    [HideInInspector] public GameObject CollectableItemsParent;
 
-    public bool isActive = false; // Tracks if the waypoint is currently active
+    public bool IsActive = false; // Tracks if the waypoint is currently active
     public static event Action<string> OnWaypointReached; // Event when waypoint task is completed
 
-    private int currentKillCount = 0;
+    private int _currentKillCount = 0;
+    private int _totalItemsToCollet;
+    private int _itemsColected;
 
     public enum TaskType
     {
         ReachDestination,
         KillEnemies,
-        DestroyObject
+        DestroyObject,
+        CollectItem,
+        DefendArea
+    }
+
+    private void Awake()
+    {
+        if (CollectableItemsParent != null)
+        {
+            _totalItemsToCollet = CollectableItemsParent.transform.childCount;
+        }
+
+        _itemsColected = 0;
     }
     private void OnEnable()
     {
         KillableDummy.OnEnemyKilled += HandleEnemyKilled;
         DestroyableObject.OnObjectDestroyed += HandleObjectDestroyed;
+        CollectableItem.OnItemCollected += HandleItemCollected;
     }
 
     private void OnDisable()
     {
         KillableDummy.OnEnemyKilled -= HandleEnemyKilled;
         DestroyableObject.OnObjectDestroyed -= HandleObjectDestroyed;
+        CollectableItem.OnItemCollected -= HandleItemCollected;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isActive && other.CompareTag("Player"))
+        if (IsActive && other.CompareTag("Player"))
         {
             Debug.Log($"Waypoint {waypointName} triggered.");
             HandleTask();
@@ -49,17 +67,32 @@ public class Waypoint : MonoBehaviour
                 break;
 
             case TaskType.KillEnemies:
-                if (enemyParent != null)
+                if (EnemyParent != null)
                 {
-                    currentKillCount = 0;
+                    _currentKillCount = 0;
                     CheckKillEnemies();
                 }
                 break;
 
             case TaskType.DestroyObject:
-                if (targetObject != null)
+                if (TargetObject != null)
                 {
                     CheckDestroyObject();
+                }
+                break;
+
+            case TaskType.CollectItem:
+                if (CollectableItemsParent != null)
+                {
+                    _itemsColected = 0;
+                    CheckCollectItems();
+                }
+                break;
+
+            case TaskType.DefendArea:
+                if (EnemyParent != null)
+                {
+                    
                 }
                 break;
         }
@@ -67,13 +100,13 @@ public class Waypoint : MonoBehaviour
 
     private void HandleEnemyKilled(GameObject enemy)
     {
-        if (enemyParent == null || !isActive) return;
+        if (EnemyParent == null || !IsActive) return;
 
-        if (enemy.transform.IsChildOf(enemyParent.transform))
+        if (enemy.transform.IsChildOf(EnemyParent.transform))
         {
-            currentKillCount++;
+            _currentKillCount++;
 
-            if (currentKillCount >= enemyParent.transform.childCount)
+            if (_currentKillCount >= EnemyParent.transform.childCount)
             {
                 CompleteTask();
             }
@@ -82,9 +115,9 @@ public class Waypoint : MonoBehaviour
 
     private void HandleObjectDestroyed(GameObject destroyedObject)
     {
-        if (targetObject == null || !isActive) return;
+        if (TargetObject == null || !IsActive) return;
 
-        if (destroyedObject == targetObject)
+        if (destroyedObject == TargetObject)
         {            
             CompleteTask();
         }
@@ -92,7 +125,7 @@ public class Waypoint : MonoBehaviour
 
     private void CheckKillEnemies()
     {
-        if (enemyParent.transform.childCount == 0)
+        if (EnemyParent.transform.childCount == 0)
         {
             CompleteTask();
         }
@@ -104,26 +137,49 @@ public class Waypoint : MonoBehaviour
 
     private void CheckDestroyObject()
     {
-        if (targetObject == null)
+        if (TargetObject == null)
         {
             CompleteTask();
         }
         else
         {
-            Debug.Log($"Waypoint {waypointName}: Destroy {targetObject.name} to complete this task.");
+            Debug.Log($"Waypoint {waypointName}: Destroy {TargetObject.name} to complete this task.");
         }
     }
 
     private void CompleteTask()
     {
         Debug.Log($"Task for waypoint '{waypointName}' completed!");
-        isActive = false;
+        IsActive = false;
         OnWaypointReached?.Invoke(waypointName); // Notify MissionManager
     }
 
     public void ActivateWaypoint()
     {
-        isActive = true;
+        IsActive = true;
         Debug.Log($"Waypoint '{waypointName}' is now active.");
+    }
+
+    private void HandleItemCollected(CollectableItem collectedItem)
+    {
+        if (CollectableItemsParent == null || !IsActive) return; 
+        
+        if (collectedItem.transform.IsChildOf(CollectableItemsParent.transform))
+        {
+            _itemsColected++;
+            
+            if (_itemsColected >= _totalItemsToCollet)
+            {
+                CompleteTask();
+            }
+        }
+    }
+
+    private void CheckCollectItems()
+    {
+        if (CollectableItemsParent.transform.childCount == 0)
+        {
+            CompleteTask();
+        }
     }
 }

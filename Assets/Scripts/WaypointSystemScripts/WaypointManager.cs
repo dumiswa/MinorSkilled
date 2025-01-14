@@ -9,12 +9,12 @@ public class WaypointManager : MonoBehaviour
     {
         foreach (var waypoint in waypoints)
         {
-            waypoint.isActive = false; // Disable all waypoints initially
+            waypoint.IsActive = false; // Disable all waypoints initially
         }
 
         if (waypoints.Count > 0)
         {
-            waypoints[0].isActive = true; // Activate the first waypoint
+            waypoints[0].IsActive = true; // Activate the first waypoint
         }
 
         Waypoint.OnWaypointReached += OnWaypointReached;

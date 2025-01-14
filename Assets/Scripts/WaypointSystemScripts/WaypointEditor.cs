@@ -106,11 +106,15 @@ public class WaypointEditor : EditorWindow
                     switch (waypoint.taskType)
                     {
                         case Waypoint.TaskType.KillEnemies:
-                            waypoint.enemyParent = (GameObject)EditorGUILayout.ObjectField("Enemy Parent", waypoint.enemyParent, typeof(GameObject), true);
+                            waypoint.EnemyParent = (GameObject)EditorGUILayout.ObjectField("Enemy Parent", waypoint.EnemyParent, typeof(GameObject), true);
                             break;
 
                         case Waypoint.TaskType.DestroyObject:
-                            waypoint.targetObject = (GameObject)EditorGUILayout.ObjectField("Target Object", waypoint.targetObject, typeof(GameObject), true);
+                            waypoint.TargetObject = (GameObject)EditorGUILayout.ObjectField("Target Object", waypoint.TargetObject, typeof(GameObject), true);
+                            break;
+
+                        case Waypoint.TaskType.CollectItem:
+                            waypoint.CollectableItemsParent = (GameObject)EditorGUILayout.ObjectField("Collectable Object", waypoint.CollectableItemsParent, typeof(GameObject), true);
                             break;
                     }
 
@@ -206,8 +210,8 @@ public class WaypointEditor : EditorWindow
             {
                 waypoint.waypointName = "New Waypoint";
                 waypoint.taskType = Waypoint.TaskType.ReachDestination;
-                waypoint.enemyParent = null;
-                waypoint.targetObject = null;
+                waypoint.EnemyParent = null;
+                waypoint.TargetObject = null;
 
                 EditorUtility.SetDirty(waypoint); // Mark as dirty to save changes
             }
