@@ -64,7 +64,7 @@ public class WaypointEditor : EditorWindow
         EditorGUILayout.Space(30);
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-        // Section 2: Configure Individual Waypoints    
+        // Section 2: Configure Individual Waypoints
         GUILayout.Label("Configure Waypoint Tasks", GetHeaderStyle());
         EditorGUILayout.Space(15);
 
@@ -92,35 +92,48 @@ public class WaypointEditor : EditorWindow
                 scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition, GUILayout.Height(400));
 
                 // Iterate over all waypoints and display configuration options
-                foreach (var waypoint in waypoints)
+                for (int i = 0; i < waypoints.Count; i++)
                 {
                     EditorGUILayout.BeginVertical("box");
 
-                    EditorGUILayout.LabelField($"Waypoint: {waypoint.gameObject.name}", EditorStyles.boldLabel);
+                    EditorGUILayout.LabelField($"Waypoint: {waypoints[i].gameObject.name}", EditorStyles.boldLabel);
 
                     // Edit waypoint properties
-                    waypoint.waypointName = EditorGUILayout.TextField("Name", waypoint.waypointName);
-                    waypoint.taskType = (Waypoint.TaskType)EditorGUILayout.EnumPopup("Task Type", waypoint.taskType);
+                    waypoints[i].waypointName = EditorGUILayout.TextField("Name", waypoints[i].waypointName);
+                    waypoints[i].taskType = (Waypoint.TaskType)EditorGUILayout.EnumPopup("Task Type", waypoints[i].taskType);
 
                     // Show fields based on task type
-                    switch (waypoint.taskType)
+                    switch (waypoints[i].taskType)
                     {
                         case Waypoint.TaskType.KillEnemies:
-                            waypoint.EnemyParent = (GameObject)EditorGUILayout.ObjectField("Enemy Parent", waypoint.EnemyParent, typeof(GameObject), true);
+                            waypoints[i].EnemyParent = (GameObject)EditorGUILayout.ObjectField("Enemy Parent", waypoints[i].EnemyParent, typeof(GameObject), true);
                             break;
 
                         case Waypoint.TaskType.DestroyObject:
-                            waypoint.TargetObject = (GameObject)EditorGUILayout.ObjectField("Target Object", waypoint.TargetObject, typeof(GameObject), true);
+                            waypoints[i].TargetObject = (GameObject)EditorGUILayout.ObjectField("Target Object", waypoints[i].TargetObject, typeof(GameObject), true);
                             break;
 
                         case Waypoint.TaskType.CollectItem:
-                            waypoint.CollectableItemsParent = (GameObject)EditorGUILayout.ObjectField("Collectable Object", waypoint.CollectableItemsParent, typeof(GameObject), true);
+                            waypoints[i].CollectableItemsParent = (GameObject)EditorGUILayout.ObjectField("Collectable Object", waypoints[i].CollectableItemsParent, typeof(GameObject), true);
                             break;
                     }
 
+                    // Arrow buttons for reordering waypoints
+                    EditorGUILayout.BeginHorizontal();
+                    if (GUILayout.Button("↑", GUILayout.Width(30)))
+                    {
+                        MoveWaypointUp(i);
+                    }
+
+                    if (GUILayout.Button("↓", GUILayout.Width(30)))
+                    {
+                        MoveWaypointDown(i);
+                    }
+                    EditorGUILayout.EndHorizontal();
+
                     if (GUILayout.Button("Zoom to Waypoint"))
                     {
-                        ZoomToWaypoint(waypoint);
+                        ZoomToWaypoint(waypoints[i]);
                     }
 
                     EditorGUILayout.EndVertical();
@@ -129,6 +142,7 @@ public class WaypointEditor : EditorWindow
 
                 EditorGUILayout.EndScrollView();
                 EditorGUILayout.Space(30);
+
                 // Save changes
                 if (GUILayout.Button("Save All Configurations"))
                 {
@@ -136,9 +150,42 @@ public class WaypointEditor : EditorWindow
                 }
             }
             else EditorGUILayout.HelpBox("No waypoints found under the selected parent. Click 'Load Waypoints' to find waypoints.", MessageType.Warning);
-            
         }
-        else EditorGUILayout.HelpBox("Select a parent GameObject that contains all waypoints.", MessageType.Info);      
+        else EditorGUILayout.HelpBox("Select a parent GameObject that contains all waypoints.", MessageType.Info);
+    }
+
+    private void MoveWaypointUp(int index)
+    {
+        if (index > 0)
+        {
+            // Swap in the list
+            var temp = waypoints[index];
+            waypoints[index] = waypoints[index - 1];
+            waypoints[index - 1] = temp;
+
+            // Swap in the scene hierarchy
+            waypoints[index].transform.SetSiblingIndex(index - 1);
+            waypoints[index - 1].transform.SetSiblingIndex(index);
+
+            Debug.Log($"Moved Waypoint {waypoints[index].waypointName} up to position {index - 1}");
+        }
+    }
+
+    private void MoveWaypointDown(int index)
+    {
+        if (index < waypoints.Count - 1)
+        {
+            // Swap in the list
+            var temp = waypoints[index];
+            waypoints[index] = waypoints[index + 1];
+            waypoints[index + 1] = temp;
+
+            // Swap in the scene hierarchy
+            waypoints[index].transform.SetSiblingIndex(index + 1);
+            waypoints[index + 1].transform.SetSiblingIndex(index);
+
+            Debug.Log($"Moved Waypoint {waypoints[index].waypointName} down to position {index + 1}");
+        }
     }
 
 

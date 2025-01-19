@@ -38,8 +38,8 @@ public class StateMachine : MonoBehaviour
 
 
         // Initialize the first state
-        // ~ PatrollingState if there are waypoints assigned
-        // ~ IdleState if there are no waypoitns assigned
+        // PatrollingState if there are waypoints assigned
+        // IdleState if there are no waypoitns assigned
         if (WaypointParent != null)
         {
             currentState = new PatrolingState(currentWaypointIndex);

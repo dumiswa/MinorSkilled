@@ -23,12 +23,6 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        /*transform.Rotate(Vector3.up, _mouseInput.x * _sensitivity * Time.deltaTime);
-
-        _pitch -= _mouseInput.y * _sensitivity * Time.deltaTime;
-        _pitch = Mathf.Clamp(_pitch, -90f, 90f);
-        transform.localEulerAngles = new Vector3(_pitch, transform.localEulerAngles.y, 0f);*/
-
         // Store current frame's mouse input
         _rotArrayHor[_rotCacheIndex] = _mouseInput.x * _sensitivity * Time.deltaTime;
         _rotArrayVer[_rotCacheIndex] = _mouseInput.y * _sensitivity * Time.deltaTime;
