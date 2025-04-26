@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63453241d80b23f408490e6ef732e15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointName: Alpha
+  waypointName: Alpha and Destroy the Barrel
   taskType: 2
   EnemyParent: {fileID: 0}
   TargetObject: {fileID: 4072999454703350194}
@@ -569,6 +569,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7731029957582063023, guid: 00483b858e7a35c438c5c2848d38e4e3,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7731029957582063023, guid: 00483b858e7a35c438c5c2848d38e4e3,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7731029957582063023, guid: 00483b858e7a35c438c5c2848d38e4e3,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: -40
       objectReference: {fileID: 0}
@@ -950,58 +960,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &390145130 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2877332834744507304, guid: c039c63aa0510d041b2aca2e51d2d9d3,
-    type: 3}
-  m_PrefabInstance: {fileID: 1780627475906366168}
-  m_PrefabAsset: {fileID: 0}
---- !u!54 &390145140
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 390145130}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &390145141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 390145130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbf0030426fb8244ca778d3c461ce192, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  WaypointParent: {fileID: 937143678}
-  Waypoints: []
-  PatrolSpeed: 3
-  ChaseSpeed: 3
-  DetectionRange: 12
-  LoseSightRange: 10
-  Player: {fileID: 0}
 --- !u!1 &394862353
 GameObject:
   m_ObjectHideFlags: 0
@@ -1839,7 +1797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63453241d80b23f408490e6ef732e15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointName: New Waypoint
+  waypointName: Beta
   taskType: 0
   EnemyParent: {fileID: 0}
   TargetObject: {fileID: 0}
@@ -2565,8 +2523,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 738304570}
   - {fileID: 1370740414}
+  - {fileID: 738304570}
   - {fileID: 1923068545}
   - {fileID: 1318914915}
   - {fileID: 22295500}
@@ -2716,7 +2674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63453241d80b23f408490e6ef732e15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointName: New Waypoint
+  waypointName: Delta
   taskType: 0
   EnemyParent: {fileID: 0}
   TargetObject: {fileID: 0}
@@ -2746,7 +2704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63453241d80b23f408490e6ef732e15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointName: Collectable Item
+  waypointName: Alpha and Collect 5 Boxes
   taskType: 3
   EnemyParent: {fileID: 0}
   TargetObject: {fileID: 0}
@@ -3790,7 +3748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63453241d80b23f408490e6ef732e15e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waypointName: Bravo
+  waypointName: Bravo and Eliminate 3 Enemies
   taskType: 1
   EnemyParent: {fileID: 1715117290}
   TargetObject: {fileID: 0}
@@ -4034,7 +3992,7 @@ PrefabInstance:
     - target: {fileID: 1830783769849136191, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -40
+      value: -27.9
       objectReference: {fileID: 0}
     - target: {fileID: 1830783769849136191, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
@@ -4044,12 +4002,12 @@ PrefabInstance:
     - target: {fileID: 1830783769849136191, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 31
+      value: 4.6
       objectReference: {fileID: 0}
     - target: {fileID: 1830783769849136191, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.998575
+      value: -0.70211816
       objectReference: {fileID: 0}
     - target: {fileID: 1830783769849136191, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
@@ -4059,7 +4017,7 @@ PrefabInstance:
     - target: {fileID: 1830783769849136191, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.053367168
+      value: -0.71206045
       objectReference: {fileID: 0}
     - target: {fileID: 1830783769849136191, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
@@ -4074,7 +4032,7 @@ PrefabInstance:
     - target: {fileID: 1830783769849136191, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 366.118
+      value: 450.806
       objectReference: {fileID: 0}
     - target: {fileID: 1830783769849136191, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
@@ -4099,7 +4057,7 @@ PrefabInstance:
     - target: {fileID: 7422878195021657394, guid: 4601698ce1878ac46b2f98e5ec198b98,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4114,15 +4072,15 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2751218468939270627, guid: c039c63aa0510d041b2aca2e51d2d9d3,
+        type: 3}
+      propertyPath: WaypointParent
+      value: 
+      objectReference: {fileID: 937143678}
     - target: {fileID: 2877332834744507304, guid: c039c63aa0510d041b2aca2e51d2d9d3,
         type: 3}
       propertyPath: m_Name
       value: DummyTest
-      objectReference: {fileID: 0}
-    - target: {fileID: 2877332834744507304, guid: c039c63aa0510d041b2aca2e51d2d9d3,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4892964863473117936, guid: c039c63aa0510d041b2aca2e51d2d9d3,
         type: 3}
@@ -4174,23 +4132,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5917555590934695468, guid: c039c63aa0510d041b2aca2e51d2d9d3,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 4ff820324784cf34aa9fb9e546f72b2b, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2877332834744507304, guid: c039c63aa0510d041b2aca2e51d2d9d3,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 390145141}
-    - targetCorrespondingSourceObject: {fileID: 2877332834744507304, guid: c039c63aa0510d041b2aca2e51d2d9d3,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 390145140}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c039c63aa0510d041b2aca2e51d2d9d3, type: 3}
 --- !u!1001 &3654152546412583203
 PrefabInstance:
@@ -4209,6 +4154,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Dummy
+      objectReference: {fileID: 0}
+    - target: {fileID: 2960348261904671626, guid: c2d9d34893f9ae94bbef2a9241c41569,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2960348261904671626, guid: c2d9d34893f9ae94bbef2a9241c41569,
         type: 3}
